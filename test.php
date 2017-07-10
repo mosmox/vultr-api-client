@@ -7,3 +7,5 @@ if($api->isConnect() == true) {
 } else {
     echo "Can not connect to remote service.\r\n";
 }
+
+
