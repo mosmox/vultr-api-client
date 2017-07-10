@@ -620,7 +620,7 @@ class Api {
      */
     public function ServerCreate($config){
         if(array_key_exists('DCID', $config) == true && array_key_exists('VPSPLANID', $config) == true && array_key_exists('OSID', $config) == true){
-            try  {
+            try {
                 $this->server_available((int)$config['DCID'], (int)$config['VPSPLANID']);
             } catch (Exception $e) {
                 return FALSE;
@@ -741,22 +741,19 @@ class Api {
     private function query($method, $args){
         $url = $this->endpoint . $method . '?api_key=' . $this->api_token;
         if ($this->debug) echo $this->request_type . ' ' . $url . PHP_EOL;
-        $_defaults = [
-            'CURLOPT_USERAGENT' => sprintf('%s v%s', $this->agent, $this->version),
-            'CURLOPT_HEADER' => 0,
-            'CURLOPT_VERBOSE' => 0,
-            'CURLOPT_SSL_VERIFYPEER' => 0,
-            'CURLOPT_SSL_VERIFYHOST' => 0,
-            'CURLOPT_HTTP_VERSION' => '1.0',
-            'CURLOPT_FOLLOWLOCATION' => 0,
-            'CURLOPT_FRESH_CONNECT' => 1,
-            'CURLOPT_RETURNTRANSFER' => 1,
-            'CURLOPT_FORBID_REUSE' => 1,
-            'CURLOPT_TIMEOUT' => 30,
-            'CURLOPT_HTTPHEADER' => array('Accept: application/json')
-        ];
 
         $this->apiSession = curl_init();
+        curl_setopt($this->apiSession, CURLOPT_USERAGENT, sprintf('%s v%s', $this->agent, $this->version));
+        curl_setopt($this->apiSession, CURLOPT_HEADER, 0);
+        curl_setopt($this->apiSession, CURLOPT_VERBOSE, 0);
+        curl_setopt($this->apiSession, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($this->apiSession, CURLOPT_SSL_VERIFYHOST, '1.0');
+        curl_setopt($this->apiSession, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($this->apiSession, CURLOPT_FRESH_CONNECT, 1);
+        curl_setopt($this->apiSession, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($this->apiSession, CURLOPT_FORBID_REUSE, 1);
+        curl_setopt($this->apiSession, CURLOPT_TIMEOUT, 30);
+        curl_setopt($this->apiSession, CURLOPT_HTTPHEADER, ['Accept: application/json']);
 
         switch($this->request_type) {
             case 'POST':
